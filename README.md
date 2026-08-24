@@ -76,7 +76,7 @@ Elimina una imagen local. Falla si hay contenedores (incluso detenidos) que la u
 ```bash
 docker tag mi-app:1.0 usuario/mi-app:1.0
 ```
-Crea un alias de la imagen con otro nombre — típicamente para prepararla antes de subirla a un registro bajo el namespace de usuario/organización.
+Crea un alias de la imagen con otro nombre, típicamente para prepararla antes de subirla a un registro bajo el namespace de usuario/organización.
 
 ---
 
@@ -211,13 +211,13 @@ Por defecto, cada contenedor tiene su propia IP interna y puede comunicarse con 
 docker network ls
 docker network create mi-red
 ```
-`ls` lista las redes existentes (`bridge`, `host` y `none` vienen por defecto). `create` crea una red *bridge* propia — la forma recomendada de conectar contenedores entre sí, en vez de usar la red `bridge` por defecto.
+`ls` lista las redes existentes (`bridge`, `host` y `none` vienen por defecto). `create` crea una red *bridge* propia: la forma recomendada de conectar contenedores entre sí, en vez de usar la red `bridge` por defecto.
 
 ```bash
 docker run -d --name db --network mi-red postgres:16
 docker run -d --name api --network mi-red -e DB_HOST=db mi-app
 ```
-Ambos contenedores quedan en `mi-red`. Desde `api`, el hostname `db` resuelve automáticamente a la IP del contenedor `db` — no hace falta hardcodear IPs.
+Ambos contenedores quedan en `mi-red`. Desde `api`, el hostname `db` resuelve automáticamente a la IP del contenedor `db`, sin necesidad de hardcodear IPs.
 
 ```bash
 docker network inspect mi-red
@@ -304,7 +304,7 @@ docker logs --tail 100 mi-nginx
 ```bash
 docker stats
 ```
-Muestra en vivo el consumo de CPU, memoria, red y disco de todos los contenedores corriendo — el primer lugar donde mirar si algo está consumiendo más recursos de lo esperado.
+Muestra en vivo el consumo de CPU, memoria, red y disco de todos los contenedores corriendo: el primer lugar donde mirar si algo está consumiendo más recursos de lo esperado.
 
 ```bash
 docker top mi-nginx
@@ -335,17 +335,17 @@ docker image prune -a
 ```bash
 docker system prune -a --volumes
 ```
-Limpieza total: contenedores detenidos, redes no usadas, imágenes sin uso y volúmenes no usados. **Cuidado**: `--volumes` borra también los datos persistidos que no estén en uso — no es reversible.
+Limpieza total: contenedores detenidos, redes no usadas, imágenes sin uso y volúmenes no usados. **Cuidado**: `--volumes` borra también los datos persistidos que no estén en uso, y no es reversible.
 
 ---
 
 ## Buenas prácticas
 
-- **Un proceso principal por contenedor**: no meter una app + su base de datos + un cron dentro del mismo contenedor. Cada servicio en su propio contenedor, orquestados con Compose (o Kubernetes) — así se pueden escalar, actualizar y reiniciar de forma independiente.
+- **Un proceso principal por contenedor**: no meter una app + su base de datos + un cron dentro del mismo contenedor. Cada servicio en su propio contenedor, orquestados con Compose (o Kubernetes), de forma que se puedan escalar, actualizar y reiniciar de forma independiente.
 - **Evitar `latest` en producción**: fijar versiones explícitas (`nginx:1.27`, no `nginx:latest`) para que un despliegue sea reproducible y no cambie solo porque alguien subió una imagen nueva con ese tag.
 - **Usar imágenes base livianas** (`-alpine`, `-slim`) cuando sea posible: menos superficie de ataque y builds/despliegues más rápidos.
 - **Aprovechar la caché de capas**: ordenar el `Dockerfile` de lo que cambia menos (dependencias) a lo que cambia más (código de la app), para no reinstalar dependencias en cada build.
 - **No correr como root dentro del contenedor** si no hace falta: agregar un usuario propio en el `Dockerfile` con `USER` reduce el impacto si alguien logra ejecutar código dentro del contenedor.
-- **No guardar secretos en la imagen** (contraseñas, API keys): pasarlos como variables de entorno en tiempo de ejecución o con un gestor de secretos, nunca hardcodeados en un `ENV` del `Dockerfile` — quedan grabados en el historial de capas de la imagen.
+- **No guardar secretos en la imagen** (contraseñas, API keys): pasarlos como variables de entorno en tiempo de ejecución o con un gestor de secretos, nunca hardcodeados en un `ENV` del `Dockerfile`, porque quedan grabados en el historial de capas de la imagen.
 - **Usar `.dockerignore`**: evita copiar `node_modules`, `.git` u otros archivos innecesarios al contexto de build, acelerando el build y reduciendo el tamaño de la imagen.
 - **Healthchecks**: definir `HEALTHCHECK` en el `Dockerfile` (o `healthcheck:` en Compose) para que Docker sepa distinguir un contenedor "corriendo" de uno "corriendo pero roto".
