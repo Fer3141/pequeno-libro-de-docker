@@ -1,6 +1,6 @@
 # Pequeño libro de Docker
 
-Guía rápida de Docker: imágenes, contenedores, Dockerfile, volúmenes, redes y Docker Compose, explicados en español.
+Guía rápida de Docker: imágenes, contenedores, Dockerfile, volúmenes, redes y Docker Compose.
 
 ## Índice
 
@@ -21,9 +21,9 @@ Guía rápida de Docker: imágenes, contenedores, Dockerfile, volúmenes, redes 
 
 ## ¿Qué es Docker?
 
-Docker empaqueta una aplicación junto con todo lo que necesita para correr (código, dependencias, librerías del sistema, configuración) en una unidad llamada **contenedor**. A diferencia de una máquina virtual, un contenedor no incluye un sistema operativo completo: comparte el kernel del host, lo que lo hace mucho más liviano y rápido de arrancar (segundos, no minutos).
+Docker empaqueta una aplicación junto con todo lo que necesita para correr (código, dependencias, librerías del sistema, configuración) en una unidad llamada **contenedor**. A diferencia de una máquina virtual, un contenedor no incluye un sistema operativo completo: comparte el kernel del host, lo que lo hace mucho más liviano y rápido de arrancar (segundos).
 
-Tres conceptos que conviene tener claros desde el principio:
+Tres conceptos:
 
 - **Imagen**: una plantilla de solo lectura (código + dependencias + instrucciones de arranque) a partir de la cual se crean contenedores. Se define con un `Dockerfile`.
 - **Contenedor**: una instancia en ejecución de una imagen. Se pueden crear muchos contenedores a partir de la misma imagen, cada uno aislado del resto.
